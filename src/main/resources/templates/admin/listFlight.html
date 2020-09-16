@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    
+    <head th:replace="admin/layout:: head"></head>
+    <body>
+        <div class="d-flex" id="wrapper">
+            <div th:replace="admin/layout:: menu"></div>
+            <div id="page-content-wrapper">
+                <div id="title">
+                    <h1>List Flight</h1> 
+                </div>
+                <div class="card-body">
+                    <div id="table" class="table-editable">
+                        
+                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Flight Number</th>
+                                    <th class="text-center">Departure Airport</th>
+                                    <th class="text-center">Arrive Airport</th>
+                                    <th class="text-center">Departure Date</th>
+                                    <th class="text-center">Arrive Date</th>
+                                    <th class="text-center">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr th:each="flight: ${listFlight}">
+                                    <td th:text="${flight.flightNumber}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${flight.departAirportName}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${flight.arrivAirportName}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${flight.departDate}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${flight.arrivDate}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${flight.price}" class="pt-3-half" contenteditable="true">Aurelia Vega</td>
+                                    <td>
+                                        <ul class="list-inline m-0">
+                                            <li class="list-inline-item">
+                                                <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+    
+    <head th:replace="admin/layout:: head"></head>
+    <body>
+        <div class="d-flex" id="wrapper">
+            <div th:replace="admin/layout:: menu"></div>
+            <div id="page-content-wrapper">
+                <div id="title">
+                    <h1>List Order Flight</h1> 
+                </div>
+                <div class="card-body">
+                    <div id="table" class="table-editable">
+                        
+                        <table class="table table-bordered table-responsive-md table-striped text-center">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Order ID</th>
+                                    <th class="text-center">Flight Number</th>
+                                    <th class="text-center">Departure Airport</th>
+                                    <th class="text-center">Arrive Airport</th>
+                                    <th class="text-center">Departure Date</th>
+                                    <th class="text-center">Arrive Date</th>
+                                    <th class="text-center">Adult Number</th>
+                                    <th class="text-center">Senior Number</th>
+                                    <th class="text-center">Child Number</th>
+                                    <th class="text-center">Price per Flight</th>
+                                     <th class="text-center">Total Price</th>
+                                    <th class="text-center">Time Order</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr th:each="order: ${listOrder}">
+                                    <td th:text="${order.id}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.flightNumber}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.departAirportId}" class="pt-3-half" contenteditable="true"></td>
+                                     <td th:text="${order.arrivAirportId}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.departDate}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.arrivDate}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.adultNumber}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.seniorNumber}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.childNumber}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.price}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.totalPrice}" class="pt-3-half" contenteditable="true"></td>
+                                    <td th:text="${order.timeOrder}" class="pt-3-half" contenteditable="true"></td>
+                                    <td>
+                                        <ul class="list-inline m-0">
+                                            <li class="list-inline-item">
+                                                <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                            </li>
+                                            <li class="list-inline-item">
+                                                <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+</html>

@@ -1,54 +1,25 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.project.FlightJDBC.service;
 
+//<editor-fold defaultstate="collapsed" desc="comment">
 import com.project.FlightJDBC.entity.Flight;
-import com.project.FlightJDBC.repository.FlightRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+//</editor-fold>
 
 /**
  *
- * @author minhluan
+ * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
-@Service
-public class FlightService implements IFLightService{
+public interface FlightService {
 
-    @Autowired
-    private FlightRepository flightRepo;
-    
-    @Override
-    public List<Flight> findAll() {
-        return flightRepo.findAll();
-    }
+    List<Flight> findAll();
 
-    @Override
-    public List<Flight> findByFromTo(String from, String to) {
-        return flightRepo.findByFromTo(from, to);
-    }
+    List<Flight> findByFromTo(String from, String to);
 
-    @Override
-    public Flight save(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    Flight findById(Long id);
 
-    @Override
-    public Flight update(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    Flight save(Flight flight);
 
-    @Override
-    public void delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    Flight update(Flight flight);
 
-    @Override
-    public Flight findById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+    void delete(Long id);
 }

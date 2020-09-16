@@ -28,7 +28,7 @@ public class FlightServiceImpl implements FlightService {
 //<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
     @Override
     public List<Flight> findByFromTo(String from, String to) {
-        return flightRepo.findByFromTo(from, to);
+        return flightRepo.findByParams(from, to);
     }
 //</editor-fold>
 

@@ -1,26 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.project.FlightJDBC.entity;
-
-import java.io.Serializable;
-import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import lombok.Data;
 
 /**
  *
- * @author minhluan
+ * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
 
-@Data
+
 public class Airport {
     private String airportId;
     private String airportName;
+
+//<editor-fold defaultstate="collapsed" desc="GET SET">
+    public String getAirportId() {
+        return airportId;
+    }
+
+    public void setAirportId(String airportId) {
+        this.airportId = airportId;
+    }
+
+    public String getAirportName() {
+        return airportName;
+    }
+
+    public void setAirportName(String airportName) {
+        this.airportName = airportName;
+    }
+//</editor-fold>
+    
 }

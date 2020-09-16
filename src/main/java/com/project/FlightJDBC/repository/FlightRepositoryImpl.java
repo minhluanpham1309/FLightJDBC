@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import javax.sql.DataSource;
 import org.springframework.jdbc.core.RowMapper;
@@ -24,7 +26,7 @@ public class FlightRepositoryImpl implements FlightRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    
+
     @Autowired
     private DataSource datasource;
 
@@ -47,7 +49,7 @@ public class FlightRepositoryImpl implements FlightRepository {
             conn = datasource.getConnection();
             statement = conn.prepareStatement(sqlBuilder.toString());
             rs = statement.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Flight flight = new Flight();
 
                 flight.setId(rs.getLong("id"));
@@ -59,7 +61,7 @@ public class FlightRepositoryImpl implements FlightRepository {
                 flight.setPrice(rs.getInt("price"));
                 flight.setDepartAirportName(rs.getString("depart_airport_name"));
                 flight.setArrivAirportName(rs.getString("arriv_airport_name"));
-                
+
                 flights.add(flight);
             }
             return flights;
@@ -71,10 +73,10 @@ public class FlightRepositoryImpl implements FlightRepository {
                 if (rs != null) {
                     rs.close();
                 }
-                if(statement != null){
+                if (statement != null) {
                     statement.close();
                 }
-                if(conn != null){
+                if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException ex) {
@@ -82,30 +84,37 @@ public class FlightRepositoryImpl implements FlightRepository {
                 return null;
             }
         }
-       /* List<Flight> result = jdbcTemplate.query(sqlBuilder.toString(), new RowMapper<Flight>() {
-            @Override
-            public Flight mapRow(ResultSet rs, int i) throws SQLException {
-                Flight flight = new Flight();
-
-                flight.setId(rs.getLong("id"));
-                flight.setFlightNumber(rs.getString("flight_number"));
-                flight.setDepartAirportId(rs.getString("depart_airport_id"));
-                flight.setArrivAirportId(rs.getString("arriv_airport_id"));
-                flight.setDepartDate(rs.getString("depart_date"));
-                flight.setArrivDate(rs.getString("arriv_date"));
-                flight.setPrice(rs.getInt("price"));
-                flight.setDepartAirportName(rs.getString("depart_airport_name"));
-                flight.setArrivAirportName(rs.getString("arriv_airport_name"));
-                return flight;
-            }
-        });
-        return result;*/
     }
 //</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="SET PARAM FOR STATEMENT">
+    private void setParameters(PreparedStatement statement, Object... params) {
+        try {
+            for (int i = 0; i < params.length; i++) {
+                Object parm = params[i];
+                int index = i + 1;
+
+                if (parm instanceof Long) {
+                    statement.setLong(index, (Long) parm);
+                } else if (parm instanceof String) {
+                    statement.setString(index, (String) parm);
+                } else if (parm instanceof Integer) {
+                    statement.setInt(index, (int) parm);
+                } else if (parm instanceof Timestamp) {
+                    statement.setTimestamp(index, (Timestamp) parm);
+                } else if (parm == null) {
+                    statement.setNull(index, Types.NULL);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+//</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="FIND FLIGHT WITH PARAMETER">
+
     @Override
-    public List<Flight> findByFromTo(String from, String to) {
+    public List<Flight> findByParams(Object... params) {
         StringBuilder sqlBuilder = new StringBuilder(
                 "select id, flight_number,\n"
                 + "depart_airport_id,\n"
@@ -117,9 +126,16 @@ public class FlightRepositoryImpl implements FlightRepository {
         sqlBuilder.append(" join tbl_airport b on Flight.arriv_airport_id = b.airport_id \n");
         sqlBuilder.append(" where depart_airport_id = ? and arriv_airport_id = ? \n");
 
-        List<Flight> result = jdbcTemplate.query(sqlBuilder.toString(), new Object[]{from, to}, new RowMapper<Flight>() {
-            @Override
-            public Flight mapRow(ResultSet rs, int i) throws SQLException {
+        List<Flight> flights = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        try {
+            conn = datasource.getConnection();
+            statement = conn.prepareStatement(sqlBuilder.toString());
+            setParameters(statement, params);
+            rs = statement.executeQuery();
+            while (rs.next()) {
                 Flight flight = new Flight();
 
                 flight.setId(rs.getLong("id"));
@@ -131,10 +147,29 @@ public class FlightRepositoryImpl implements FlightRepository {
                 flight.setPrice(rs.getInt("price"));
                 flight.setDepartAirportName(rs.getString("depart_airport_name"));
                 flight.setArrivAirportName(rs.getString("arriv_airport_name"));
-                return flight;
+
+                flights.add(flight);
             }
-        });
-        return result;
+            return flights;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        }
     }
 //</editor-fold>
 

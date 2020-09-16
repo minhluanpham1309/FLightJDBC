@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface FlightRepository {
     List<Flight> findAll();
-    List<Flight> findByFromTo(String from, String to);
+    List<Flight> findByParams(Object... params);
     Long save(Flight flight);
     void update(Flight flight);
     void delete(Long id);

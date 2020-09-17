@@ -2,9 +2,14 @@ package com.project.FlightJDBC.repository;
 
 //<editor-fold defaultstate="collapsed" desc="IMPORT">
 import com.project.FlightJDBC.entity.OrderFlight;
+import com.zaxxer.hikari.HikariDataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,30 +24,38 @@ import org.springframework.stereotype.Repository;
 public class OrderFlightRepositoryImpl implements OrderFlightRepository {
 
     @Autowired
-    private JdbcTemplate jdbctemplate;
+    private HikariDataSource datasource;
 
     //<editor-fold defaultstate="collapsed" desc="FIND ALL">
     @Override
     public List<OrderFlight> findAll() {
-        String sql = "select  order_flight.id as orderId, "
-                + "flight_number, "
-                + "depart_airport_id, "
-                + "arriv_airport_id,"
-                + "time_order,"
-                + "type_order,"
-                + "adult_number,"
-                + "senior_number,"
-                + "child_number, "
-                + "total_price,"
-                + "depart_date,"
-                + "arriv_date,"
-                + "price"
-                + " from order_flight join Flight on order_flight.flight_id = flight.id";
-        List<OrderFlight> orderFlights = jdbctemplate.query(sql, new RowMapper<OrderFlight>() {
-            @Override
-            public OrderFlight mapRow(ResultSet rs, int i) throws SQLException {
+        String sql = "select  order_id,\n"
+                + "flight_number,\n"
+                + "depart_airport_id,\n"
+                + "arriv_airport_id,\n"
+                + "time_order,\n"
+                + "type_order,\n"
+                + "adult_number,\n"
+                + "senior_number,\n"
+                + "child_number,\n"
+                + "total_price,\n"
+                + "depart_date,\n"
+                + "arriv_date,\n"
+                + "price\n"
+                + " from tbl_order_flight join tbl_flight on tbl_order_flight.flight_id = tbl_flight.flight_id";
+
+        Connection conn = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        List<OrderFlight> orders = new ArrayList<>();
+        try {
+            conn = datasource.getConnection();
+            statement = conn.prepareStatement(sql);
+            rs = statement.executeQuery();
+            while (rs.next()) {
                 OrderFlight orderFlight = new OrderFlight();
-                orderFlight.setId(rs.getLong("orderId"));
+                
+                orderFlight.setId(rs.getLong("order_id"));
                 orderFlight.setFlightNumber(rs.getString("flight_number"));
                 orderFlight.setTypeOrder(rs.getString("type_order"));
                 orderFlight.setAdultNumber(rs.getInt("adult_number"));
@@ -55,10 +68,29 @@ public class OrderFlightRepositoryImpl implements OrderFlightRepository {
                 orderFlight.setArrivDate(rs.getString("arriv_date"));
                 orderFlight.setPrice(rs.getInt("price"));
                 orderFlight.setTotalPrice(rs.getInt("total_price"));
-                return orderFlight;
+
+                orders.add(orderFlight);
             }
-        });
-        return orderFlights;
+            return orders;
+        } catch (SQLException e) {
+            System.out.println(e.getStackTrace());
+            return null;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getStackTrace());
+                return null;
+            }
+        }
     }
 //</editor-fold>
 

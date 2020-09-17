@@ -1,4 +1,4 @@
-package com.project.FlightJDBC.entity;
+package com.project.FlightJDBC.DTO;
 
 import java.sql.Timestamp;
 
@@ -6,10 +6,10 @@ import java.sql.Timestamp;
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
-public class Flight {
-
+public class FlightDTO {
+    
     private Long id;
-    private String flightNumber;
+    private String flightNumver;
     private Timestamp departDate;
     private Timestamp arrivDate;
     private int price;
@@ -18,8 +18,7 @@ public class Flight {
     private String departAirportName;
     private String arrivAirportName;
 
- //<editor-fold defaultstate="collapsed" desc="Get Set">
-     public Long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -27,12 +26,12 @@ public class Flight {
         this.id = id;
     }
 
-    public String getFlightNumber() {
-        return flightNumber;
+    public String getFlightNumver() {
+        return flightNumver;
     }
 
-    public void setFlightNumber(String flightNumber) {
-        this.flightNumber = flightNumber;
+    public void setFlightNumver(String flightNumver) {
+        this.flightNumver = flightNumver;
     }
 
     public Timestamp getDepartDate() {
@@ -90,7 +89,4 @@ public class Flight {
     public void setArrivAirportName(String arrivAirportName) {
         this.arrivAirportName = arrivAirportName;
     }
-//</editor-fold>
-   
-
 }

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
     <head th:replace="web/layout:: head"></head>
     <body>
@@ -10,25 +10,40 @@
                 <div id="title">
                     <h1>List Flight</h1> 
                 </div>
-                <form th:action = "@{/searchFlight}" method="get">
+                
+                <form id = "search" th:action = "@{/searchFlight}" th:object="${flight}" method = "get">
                     <div class="form-group row" >
                         <label for="inputEmail3" class="col-sm-1 col-form-label">From</label>
-                        <div class="col-sm-3">
-                            <input th:name="from" type="text"  class="form-control"  placeholder="From"/>
-                        </div>
+                        <select th:field="*{departAirportId}" class="col-sm-2" id="inlineFormCustomSelect">
+                            <option selected="" value="" disabled="true">Choose From...</option>
+                            <option th:each="airport:${listAirport}" th:text="${airport.airportName}" th:value="${airport.airportId}" th:name="${departAirportId}"></option>    
+                        </select>
                         <label for="inputPassword3" class="col-sm-1 col-form-label">To</label>
-                        <div class="col-sm-3">
-                            <input th:name="to" type="text"  class="form-control" placeholder="To"/>
-                        </div>
-                         <div class="col-sm-3">
-                            <button type="submit" id="btnAdd" class="btn btn-primary">Search</button>
+                        <select th:field="*{arrivAirportId}" class="col-sm-2" id="inlineFormCustomSelect">
+                            <option selected="" value="" disabled="true">Choose To...</option>
+                            <option th:each="airport:${listAirport}" th:text="${airport.airportName}" th:value="${airport.airportId}" name="arrivAirportId"></option>    
+                        </select>
+                    </div>
+                    <div class="form-group row">            
+                        <label class="col-sm-1 col-form-label" >Price</label>
+                        <input type="number" class="col-sm-2" th:name="price" th:field="*{price}"/>
+                        <label for="inputPassword3" class="col-sm-1 col-form-label">Type Flight</label>
+                        <select name = "to" class="col-sm-2" id="inlineFormCustomSelect">
+                            <option selected="" value="" disabled="true">Choose To...</option>
+                            <option th:name="typeFlight" th:value="OW">One Way</option>
+                            <option th:name="typeFlight" th:value="RT">Return Trip</option>   
+                        </select>    
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="col-sm-1">
+                            <button type="submit" id="btnSearch" class="btn btn-primary">Search</button>
                         </div>
                     </div>
-            
                 </form>
+                <h1 th:text="${flight.departAirportId}"></h1>
                 <div class="card-body">
                     <div id="table" class="table-editable">
-
                         <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
@@ -61,8 +76,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </body>
 </html>

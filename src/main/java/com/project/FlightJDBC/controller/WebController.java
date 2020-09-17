@@ -1,15 +1,21 @@
 package com.project.FlightJDBC.controller;
 //<editor-fold defaultstate="collapsed" desc="IMPORT">
+
+import com.project.FlightJDBC.DTO.FlightDTO;
+import com.project.FlightJDBC.service.AirportService;
 import com.project.FlightJDBC.service.FlightService;
 import com.project.FlightJDBC.service.OrderFlightService;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 //</editor-fold>
-
 
 /**
  *
@@ -17,26 +23,58 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class WebController {
+
     @Autowired
     private FlightService flightserv;
-    
+
+    @Autowired
+    private AirportService airportServ;
+
     @Autowired
     private OrderFlightService orderService;
+
     //<editor-fold defaultstate="collapsed" desc="INDEX">
-    @RequestMapping(value = "/")
-    public String index(Model model){
-        model.addAttribute("listFlight", flightserv.findAll());
-        return "web/listFlight";
+    @RequestMapping(value = "/index")
+    public ModelAndView index(Model model) {
+        
+        Map<String, Object> map = new HashMap<>();
+        map.put("flight", new FlightDTO());
+        map.put("listAirport", airportServ.findAll());
+        map.put("listFlight", flightserv.findAll());
+        /*model.addAttribute("flight", new FlightDTO());
+        model.addAttribute("listAirport", airportServ.findAll());
+        model.addAttribute("listFlight", flightserv.findAll());*/
+        return new ModelAndView("web/listFlight",map);
     }
 //</editor-fold>
-    
+
     //<editor-fold defaultstate="collapsed" desc="SEARCH">
+    /*@RequestMapping(value = "/searchFlight", method = RequestMethod.GET)
+    public String searchFlight(@ModelAttribute(name = "flight") FlightDTO flight, Model model,
+            @RequestParam(name = "from", required = false) String from,
+            @RequestParam(name = "to", required = false) String to,
+            @RequestParam(name = "price", required = false) String price 
+            ){
+        model.addAttribute("listAirport", airportServ.findAll());
+        if(from == null && to == null && price.equals("")){
+            model.addAttribute("listFlight", flightserv.findAll());
+        }else{
+            model.addAttribute("listFlight", flightserv.findByFromTo(from, to, price.isEmpty()? 0: Integer.parseInt(price)));
+        }
+        return "web/listFlight";
+    }*/
+//</editor-fold>
     @RequestMapping(value = "/searchFlight", method = RequestMethod.GET)
-    public String searchFlight(@RequestParam(value = "from")String from,
-           @RequestParam(value = "to") String to, Model model){
-        model.addAttribute("listFlight", flightserv.findByFromTo(from, to));
+    public String searchFlight(@ModelAttribute(name="flight") FlightDTO flight, Model model) {
+        //model.addAttribute("filght", new FlightDTO());
+        model.addAttribute("listAirport", airportServ.findAll());
+        if (flight.getDepartAirportId() == null && flight.getArrivAirportId() == null && flight.getPrice() == 0) {
+            model.addAttribute("listFlight", flightserv.findAll());
+        } else {
+            model.addAttribute("listFlight", flightserv.findByFromTo(flight.getDepartAirportId(), flight.getArrivAirportId(), flight.getPrice()));
+        }
         return "web/listFlight";
     }
-//</editor-fold>
-    
+
+   
 }

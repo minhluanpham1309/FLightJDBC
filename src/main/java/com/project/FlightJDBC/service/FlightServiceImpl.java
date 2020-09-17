@@ -1,11 +1,14 @@
 package com.project.FlightJDBC.service;
 
 //<editor-fold defaultstate="collapsed" desc="comment">
+import com.project.FlightJDBC.DTO.FlightDTO;
 import com.project.FlightJDBC.entity.Flight;
 import com.project.FlightJDBC.repository.FlightRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 //</editor-fold>
 
 /**
@@ -27,8 +30,9 @@ public class FlightServiceImpl implements FlightService {
 
 //<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
     @Override
-    public List<Flight> findByFromTo(String from, String to) {
-        return flightRepo.findByParams(from, to);
+    public List<Flight> findByFromTo(Object... params) {
+       
+        return flightRepo.findByParams(params);
     }
 //</editor-fold>
 

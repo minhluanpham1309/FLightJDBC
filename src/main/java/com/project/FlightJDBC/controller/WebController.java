@@ -53,6 +53,7 @@ public class WebController {
     @RequestMapping(value = "/searchFlight", method = RequestMethod.GET)
     public String searchFlight(@ModelAttribute(name = "flight") FlightDTO flight, Model model) {
         model.addAttribute("filght", new FlightDTO());
+        
         model.addAttribute("listAirport", airportServ.findAll());
         model.addAttribute("listFlight", flightserv.findByParam(flight));
         return "web/listFlight";

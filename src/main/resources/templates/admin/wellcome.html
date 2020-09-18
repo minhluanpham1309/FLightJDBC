@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-    
-    <head th:replace="admin/layout:: head">
-        
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" layout:decorator="~{admin/layout}">
+
+    <head>
+        <title th:fragment="titleWellcome">Wellcome page</title>
+        <th:block th:replace="admin/layout::head"></th:block>
+        <link th:href="@{/css/wellcome.css}" href="" rel="stylesheet"/>
     </head>
     <body>
         <div class="d-flex" id="wrapper">
-            <div th:replace="admin/layout:: menu"></div>
+            <div th:replace="admin/layout::menu"></div>
             <div id="page-content-wrapper">
                 <div id="wellcomeTitle">
                     <h1>Wellcome page Admin</h1> 
                 </div>
             </div>
-
         </div>
-
     </body>
 </html>

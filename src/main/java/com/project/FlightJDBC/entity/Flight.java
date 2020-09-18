@@ -17,6 +17,7 @@ public class Flight {
     private String arrivAirportId;
     private String departAirportName;
     private String arrivAirportName;
+    //private String flightType;
 
  //<editor-fold defaultstate="collapsed" desc="Get Set">
      public Long getId() {

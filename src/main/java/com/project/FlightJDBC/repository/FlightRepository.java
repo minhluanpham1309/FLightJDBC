@@ -1,6 +1,7 @@
 package com.project.FlightJDBC.repository;
 
 import com.project.FlightJDBC.entity.Flight;
+import java.sql.Timestamp;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  */
 public interface FlightRepository {
     List<Flight> findAll();
-    List<Flight> findByParams(Object... params);
+    List<Flight> findByParams(String from, String to, int priceFrom, int priceTo, Timestamp date);
     Long save(Flight flight);
     void update(Flight flight);
     void delete(Long id);

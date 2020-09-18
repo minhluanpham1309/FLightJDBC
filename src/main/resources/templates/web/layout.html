@@ -1,38 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-    <head th:fragment="header">
-        <meta charset="UTF-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <link rel="stylesheet" 
-              href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-              crossorigin="anonymous" />
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
-        crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
-        crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
-                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
-        crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-        <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet"/>
-        <link th:href="@{/css/wellcome.css}" rel="stylesheet"/>
-        <link th:href="@{/css/listAdmin.css}" rel="stylesheet"/>
-        <link th:href="@{/css/listFlight.css}" rel="stylesheet"/>
+    <head>
+        <title>Layout Page</title>
+        <th:block th:fragment="head">
+            <meta charset="UTF-8"/>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+            <link th:href="@{/bootstrap/css/bootstrap.min.css}" href="" rel="stylesheet"/>
+            <link th:href="@{https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css}" href="" rel="stylesheet"/>
+            
+            <script th:src="@{/js/jquery.slim.min.js}" src=""></script>
+            <link th:href="@{/css/wellcome.css}" href="" rel="stylesheet"/>
+            <link th:href="@{/bootstrap/css/bootstrap-datetimepicker.min.css}" href="" rel="stylesheet"/>
+            <link th:href="@{/css/listFlight.css}" href="" rel="stylesheet"/>
+            <link th:href="@{/css/simple-sidebar.css}" rel="stylesheet"/>
+        </th:block>
     </head>
 
     <body>
-        <div id="page-content-wrapper">
-            <div id="title">
-                <h1>List Flight</h1> 
-            </div>
-            <div th:replace="~{web/listFlight::#search}" th:abbr=""></div>
-        </div>
-
-        <!--<script th:src="@{/js/bootstrap.bundle.min.js}"></script>-->
-
+        <th:block th:fragment="js_layout">
+            <script th:src="@{/bootstrap/js/bootstrap.min.js}" src=""></script>
+            <script th:src="@{/bootstrap/js/moment.min.js}" src=""></script>
+            <script th:src="@{/bootstrap/js/bootstrap-datetimepicker.min.js}" src=""></script> 
+        </th:block>
     </body>
 
 </html>

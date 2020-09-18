@@ -1,6 +1,6 @@
 package com.project.FlightJDBC.controller;
-//<editor-fold defaultstate="collapsed" desc="IMPORT">
 
+//<editor-fold defaultstate="collapsed" desc="IMPORT">
 import com.project.FlightJDBC.DTO.FlightDTO;
 import com.project.FlightJDBC.service.AirportService;
 import com.project.FlightJDBC.service.FlightService;
@@ -19,7 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
- * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
+ * @author Pham Minh Luan
+ * @email phamminhluan@fabercompany.co.jp
  */
 @Controller
 public class WebController {
@@ -33,10 +34,10 @@ public class WebController {
     @Autowired
     private OrderFlightService orderService;
 
-    //<editor-fold defaultstate="collapsed" desc="INDEX">
+//<editor-fold defaultstate="collapsed" desc="INDEX">
     @RequestMapping(value = "/index")
     public ModelAndView index(Model model) {
-        
+
         Map<String, Object> map = new HashMap<>();
         map.put("flight", new FlightDTO());
         map.put("listAirport", airportServ.findAll());
@@ -44,37 +45,18 @@ public class WebController {
         /*model.addAttribute("flight", new FlightDTO());
         model.addAttribute("listAirport", airportServ.findAll());
         model.addAttribute("listFlight", flightserv.findAll());*/
-        return new ModelAndView("web/listFlight",map);
+        return new ModelAndView("web/listFlight", map);
     }
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="SEARCH">
-    /*@RequestMapping(value = "/searchFlight", method = RequestMethod.GET)
-    public String searchFlight(@ModelAttribute(name = "flight") FlightDTO flight, Model model,
-            @RequestParam(name = "from", required = false) String from,
-            @RequestParam(name = "to", required = false) String to,
-            @RequestParam(name = "price", required = false) String price 
-            ){
-        model.addAttribute("listAirport", airportServ.findAll());
-        if(from == null && to == null && price.equals("")){
-            model.addAttribute("listFlight", flightserv.findAll());
-        }else{
-            model.addAttribute("listFlight", flightserv.findByFromTo(from, to, price.isEmpty()? 0: Integer.parseInt(price)));
-        }
-        return "web/listFlight";
-    }*/
-//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="SEARCH">
     @RequestMapping(value = "/searchFlight", method = RequestMethod.GET)
-    public String searchFlight(@ModelAttribute(name="flight") FlightDTO flight, Model model) {
-        //model.addAttribute("filght", new FlightDTO());
+    public String searchFlight(@ModelAttribute(name = "flight") FlightDTO flight, Model model) {
+        model.addAttribute("filght", new FlightDTO());
         model.addAttribute("listAirport", airportServ.findAll());
-        if (flight.getDepartAirportId() == null && flight.getArrivAirportId() == null && flight.getPrice() == 0) {
-            model.addAttribute("listFlight", flightserv.findAll());
-        } else {
-            model.addAttribute("listFlight", flightserv.findByFromTo(flight.getDepartAirportId(), flight.getArrivAirportId(), flight.getPrice()));
-        }
+        model.addAttribute("listFlight", flightserv.findByParam(flight));
         return "web/listFlight";
     }
+//</editor-fold>
 
-   
 }

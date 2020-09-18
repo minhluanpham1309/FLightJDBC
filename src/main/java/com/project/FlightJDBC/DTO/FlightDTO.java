@@ -10,9 +10,11 @@ public class FlightDTO {
     
     private Long id;
     private String flightNumver;
-    private Timestamp departDate;
-    private Timestamp arrivDate;
+    private String departDate;
+    private String arrivDate;
     private int price;
+    private int priceFrom;
+    private int priceTo;
     private String departAirportId;
     private String arrivAirportId;
     private String departAirportName;
@@ -34,19 +36,19 @@ public class FlightDTO {
         this.flightNumver = flightNumver;
     }
 
-    public Timestamp getDepartDate() {
+    public String getDepartDate() {
         return departDate;
     }
 
-    public void setDepartDate(Timestamp departDate) {
+    public void setDepartDate(String departDate) {
         this.departDate = departDate;
     }
 
-    public Timestamp getArrivDate() {
+    public String getArrivDate() {
         return arrivDate;
     }
 
-    public void setArrivDate(Timestamp arrivDate) {
+    public void setArrivDate(String arrivDate) {
         this.arrivDate = arrivDate;
     }
 
@@ -88,5 +90,21 @@ public class FlightDTO {
 
     public void setArrivAirportName(String arrivAirportName) {
         this.arrivAirportName = arrivAirportName;
+    }
+    
+    public int getPriceFrom() {
+        return priceFrom;
+    }
+
+    public void setPriceFrom(int priceFrom) {
+        this.priceFrom = priceFrom;
+    }
+
+    public int getPriceTo() {
+        return priceTo;
+    }
+
+    public void setPriceTo(int priceTo) {
+        this.priceTo = priceTo;
     }
 }

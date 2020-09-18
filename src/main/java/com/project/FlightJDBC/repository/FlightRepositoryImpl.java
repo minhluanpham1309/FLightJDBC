@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
-import javax.sql.DataSource;
 //</editor-fold>
 
 /**
@@ -114,45 +113,34 @@ public class FlightRepositoryImpl implements FlightRepository {
 
 //<editor-fold defaultstate="collapsed" desc="FIND FLIGHT WITH PARAMETER">
     @Override
-    public List<Flight> findByParams(Object... params) {
-        StringBuilder sqlBuilder = new StringBuilder(
-                "select flight_id, flight_number,\n"
+    public List<Flight> findByParams(String from, String to, int priceFrom, int priceTo, Timestamp date) {
+
+        List<Flight> flights = new ArrayList<>();
+        String sql = "select flight_id, flight_number,\n"
                 + "depart_airport_id,\n"
                 + "a.airport_name as depart_airport_name,\n"
                 + "arriv_airport_id,\n"
                 + "b.airport_name as arriv_airport_name,\n"
-                + "depart_date,arriv_date,price\n");
-        sqlBuilder.append(" from tbl_flight join tbl_airport a on tbl_flight.depart_airport_id = a.airport_id \n");
-        sqlBuilder.append(" join tbl_airport b on tbl_flight.arriv_airport_id = b.airport_id \n ");
-        sqlBuilder.append("where if(1=1,depart_airport_id = ? and arriv_airport_id = ?, 1=1) and if(1=1, price = ?, 1=1)");
+                + "DATE_FORMAT(depart_date, \"%d/%m/%Y %H:%S\") as depart_date,\n"
+                + "DATE_FORMAT(arriv_date, \"%d/%m/%Y %H:%S\") as arriv_date,\n"
+                + "price\n"
+                + "from tbl_flight join tbl_airport a on tbl_flight.depart_airport_id = a.airport_id \n"
+                + "join tbl_airport b on tbl_flight.arriv_airport_id = b.airport_id \n"
+                + "where 1=1\n";
+        if (!from.isEmpty() && !to.isEmpty()) {
+            sql = sql.concat("and depart_airport_id = ? and arriv_airport_id = ?\n");
+        }
+        sql = sql.concat("and price between ? and ?\n");
         
-        String sss = "";
-        sss.concat("");
-        for (int i = 0; i < 10; i++) {
-            
-        }
-
-        if (params.length > 1 && !params[0].equals("") && !params[1].equals("")) {
-            sqlBuilder.append("depart_airport_id = ? and arriv_airport_id = ? \n");
-        }
-        if (!params[2].equals(0)) {
-            sqlBuilder.append("and price = ?");
-        }
-        List<Flight> flights = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement statement = null;
         ResultSet rs = null;
-        try {
-            conn = datasource.getConnection();
-            statement = conn.prepareStatement(sqlBuilder.toString());
-            if (!params[0].equals("") && !params[1].equals("")) {
-                statement.setString(1, (String) params[0]);
-                statement.setString(2, (String) params[1]);
-            }
-            if (!params[2].equals(0)) {
-                statement.setInt(3, (int) params[2]);
-            }
-            //setParameters(statement, params);
+        try (Connection conn = datasource.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql);) {
+            statement.setString(1, from);
+            statement.setString(2, to);
+            statement.setInt(3, priceFrom);
+            statement.setInt(4, priceTo);
+            System.out.println("---sql---");
+            System.out.println(statement.toString());
             rs = statement.executeQuery();
             while (rs.next()) {
                 Flight flight = new Flight();
@@ -171,30 +159,19 @@ public class FlightRepositoryImpl implements FlightRepository {
             }
             return flights;
         } catch (SQLException e) {
-            StackTraceElement[] stack = e.getStackTrace();
-            String exception = "";
-            for (StackTraceElement s : stack) {
-                exception = exception + s.toString() + "\n\t\t";
-            }
-            System.out.println(exception);
-            
-            return null;
+            //System.out.println(e.getStackTrace());
+            e.printStackTrace();
         } finally {
             try {
                 if (rs != null) {
                     rs.close();
                 }
-                if (statement != null) {
-                    statement.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
             } catch (SQLException ex) {
+                //System.out.println(ex.getStackTrace());
                 ex.printStackTrace();
-                return null;
             }
         }
+        return flights;
     }
 //</editor-fold>
 

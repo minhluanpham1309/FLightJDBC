@@ -3,7 +3,6 @@ package com.project.FlightJDBC.config;
 //<editor-fold defaultstate="collapsed" desc="IMPORT">
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import javax.sql.DataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //</editor-fold>
@@ -15,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DatabaseConfig {
 
-    //<editor-fold defaultstate="collapsed" desc="HIKARY DATASOURCE">
+//<editor-fold defaultstate="collapsed" desc="HIKARY DATASOURCE">
     @Bean
-    public DataSource dataSource() {
+    public HikariDataSource dataSource() {
         System.out.println("----HIKARY DATASOURCE----");
         HikariConfig config = new HikariConfig();
 
@@ -27,11 +26,16 @@ public class DatabaseConfig {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+        config.addDataSourceProperty("characterEncoding", "utf8"); //tried with UTF-8 as well
+        config.addDataSourceProperty("useUnicode", "true");
         config.setMaximumPoolSize(5);
 
+        System.out.println("----Start HIKARY DATASOURCE----");
         HikariDataSource ds = new HikariDataSource(config);
+        //ds.setAutoCommit(false);
+        System.out.println("----End HIKARY DATASOURCE----");
         return ds;
     }
-    //</editor-fold>
+//</editor-fold>
 
 }

@@ -1,7 +1,6 @@
 package com.project.FlightJDBC.repository;
 
 //<editor-fold defaultstate="collapsed" desc="IMPORT">
-import com.mysql.cj.protocol.Resultset;
 import com.project.FlightJDBC.entity.Airport;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,8 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

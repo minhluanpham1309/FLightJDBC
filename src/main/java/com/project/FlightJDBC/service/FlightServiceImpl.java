@@ -16,7 +16,8 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
+ * @author Pham Minh Luan 
+ * @email phamminhluan@fabercompany.co.jp 
  */
 @Service
 public class FlightServiceImpl implements FlightService {
@@ -36,12 +37,12 @@ public class FlightServiceImpl implements FlightService {
     public List<Flight> findByParam(FlightDTO flightDTO) {
 
         Timestamp dateTimestamp = null;
-        try{
+        try {
             DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
             Date date = formatter.parse(flightDTO.getDepartDate());
             dateTimestamp = new Timestamp(date.getTime());
-            
-        }catch(ParseException ex){
+
+        } catch (ParseException ex) {
             ex.printStackTrace();
         }
         return flightRepo.findByParams(flightDTO.getDepartAirportId(), flightDTO.getArrivAirportId(), flightDTO.getPriceFrom(), flightDTO.getPriceTo(), dateTimestamp);
@@ -70,6 +71,10 @@ public class FlightServiceImpl implements FlightService {
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
-    
+    @Override
+    public Flight findById(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 //</editor-fold>
+
 }

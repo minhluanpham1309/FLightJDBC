@@ -9,10 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 //</editor-fold>
 
@@ -24,7 +21,7 @@ import org.springframework.stereotype.Repository;
 public class OrderFlightRepositoryImpl implements OrderFlightRepository {
 
     @Autowired
-    private HikariDataSource datasource;
+    private HikariDataSource dataSource;
 
     //<editor-fold defaultstate="collapsed" desc="FIND ALL">
     @Override
@@ -49,12 +46,12 @@ public class OrderFlightRepositoryImpl implements OrderFlightRepository {
         ResultSet rs = null;
         List<OrderFlight> orders = new ArrayList<>();
         try {
-            conn = datasource.getConnection();
+            conn = dataSource.getConnection();
             statement = conn.prepareStatement(sql);
             rs = statement.executeQuery();
             while (rs.next()) {
                 OrderFlight orderFlight = new OrderFlight();
-                
+
                 orderFlight.setId(rs.getLong("order_id"));
                 orderFlight.setFlightNumber(rs.getString("flight_number"));
                 orderFlight.setTypeOrder(rs.getString("type_order"));

@@ -23,7 +23,7 @@ public class OrderFlightRepositoryImpl implements OrderFlightRepository {
     @Autowired
     private HikariDataSource dataSource;
 
-    //<editor-fold defaultstate="collapsed" desc="FIND ALL">
+//<editor-fold defaultstate="collapsed" desc="FIND ALL">
     @Override
     public List<OrderFlight> findAll() {
         String sql = "select  order_id,\n"
@@ -91,32 +91,58 @@ public class OrderFlightRepositoryImpl implements OrderFlightRepository {
     }
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="SAVE">
+//<editor-fold defaultstate="collapsed" desc="SAVE">
     @Override
     public Long save(OrderFlight orderFlight) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="UPDATE">
+//<editor-fold defaultstate="collapsed" desc="UPDATE">
     @Override
     public void update(OrderFlight orderFlight) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="DELETE">
+//<editor-fold defaultstate="collapsed" desc="DELETE">
     @Override
     public void delete(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
+//<editor-fold defaultstate="collapsed" desc="FIND BY ID">
     @Override
     public OrderFlight findById(Long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 //</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="COUNT ORDER FOR FLIGHT WITH FLIGHT ID">
+    @Override
+    public int countOrderForFlightId(Long id) {
+        String sql = "Select count(*) "
+                    + "from tbl_order_flight\n"
+                    + "where flight_id = ?";
+        try (Connection conn = dataSource.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql);){
+            statement.setLong(1, id);
+            System.out.println("-----SQL COUNT WITH FLIGHT ID-----");
+            System.out.println(statement.toString());
+            try (ResultSet rs = statement.executeQuery(sql);){
+                System.out.println(rs.toString());
+            }catch(SQLException ex){
+                
+                ex.printStackTrace();
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return 1;
+    }
+//</editor-fold>
+    
+    
 
 }

@@ -1,7 +1,5 @@
 package com.project.FlightJDBC.entity;
 
-import java.sql.Timestamp;
-
 /**
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
@@ -10,8 +8,8 @@ public class Flight {
 
     private Long id;
     private String flightNumber;
-    private Timestamp departDate;
-    private Timestamp arrivDate;
+    private String departDate;
+    private String arrivDate;
     private int price;
     private String departAirportId;
     private String arrivAirportId;
@@ -36,19 +34,19 @@ public class Flight {
         this.flightNumber = flightNumber;
     }
 
-    public Timestamp getDepartDate() {
+    public String getDepartDate() {
         return departDate;
     }
 
-    public void setDepartDate(Timestamp departDate) {
+    public void setDepartDate(String departDate) {
         this.departDate = departDate;
     }
 
-    public Timestamp getArrivDate() {
+    public String getArrivDate() {
         return arrivDate;
     }
 
-    public void setArrivDate(Timestamp arrivDate) {
+    public void setArrivDate(String arrivDate) {
         this.arrivDate = arrivDate;
     }
 

@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 public class FlightDTO {
     
     private Long id;
-    private String flightNumver;
+    private String flightNumber;
     private String departDate;
     private String arrivDate;
     private int price;
@@ -28,12 +28,12 @@ public class FlightDTO {
         this.id = id;
     }
 
-    public String getFlightNumver() {
-        return flightNumver;
+    public String getFlightNumber() {
+        return flightNumber;
     }
 
-    public void setFlightNumver(String flightNumver) {
-        this.flightNumver = flightNumver;
+    public void setFlightNumber(String flightNumber) {
+        this.flightNumber = flightNumber;
     }
 
     public String getDepartDate() {

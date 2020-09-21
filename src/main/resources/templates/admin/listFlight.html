@@ -3,7 +3,7 @@
 <html xmlns:th="http://www.thymeleaf.org" 
       xmlns="http://www.w3.org/1999/xhtml" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-    
+
     <head>
         <title th:fragment="title">List Flight</title>
         <th:block th:replace="admin/layout::head"></th:block>
@@ -17,7 +17,7 @@
                 </div>
                 <div class="card-body">
                     <div id="table" class="table-editable">
-                        
+
                         <table class="table table-bordered table-responsive-md table-striped text-center">
                             <thead>
                                 <tr>
@@ -27,6 +27,10 @@
                                     <th class="text-center">Departure Date</th>
                                     <th class="text-center">Arrive Date</th>
                                     <th class="text-center">Price</th>
+                                    <th>
+                                        <a th:href="@{/admin/addFlight}" class="btn btn-success"> <i class="fa fa-plus"></i>Add</a>
+                                        
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody >
@@ -40,10 +44,21 @@
                                     <td>
                                         <ul class="list-inline m-0">
                                             <li class="list-inline-item">
-                                                <button class="btn btn-success btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+                                                <a class="btn btn-success btn-sm rounded-0" 
+                                                   th:href = "@{'/admin/edit/' + ${flight.id}}"
+                                                   data-toggle="tooltip" 
+                                                   data-placement="top" 
+                                                   title="Edit"><i class="fa fa-edit"></i></a>
                                             </li>
                                             <li class="list-inline-item">
-                                                <button class="btn btn-danger btn-sm rounded-0" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>
+                                                <form id = "delete_form"th:action= "@{'/admin/delete/' + ${flight.id}}" method="post">
+                                                    <input type="hidden" name="name" value="value"/>
+                                                    <a class="btn btn-danger btn-sm rounded-0" 
+                                                       data-toggle="tooltip" 
+                                                       data-placement="top"
+                                                       onclick="this.parentNode.submit();"
+                                                       title="Delete"><i class="fa fa-trash"></i></a>
+                                                </form>
                                             </li>
                                         </ul>
                                     </td>
@@ -54,7 +69,7 @@
                 </div>
             </div>
         </div> 
-        
+
         <th:block th:replace="admin/layout::js_layout"></th:block>
     </body>
 </html>

@@ -13,7 +13,7 @@ public interface OrderFlightService {
 
     List<OrderFlight> findAll();
 
-    OrderFlight findById(Long id);
+    OrderFlight findById(long id);
 
     OrderFlight save(OrderFlight flight);
 

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title>Flight Detail</title>
+        <th:block th:replace="web/layout::head"></th:block>
+    </head>
+    <body>
+        <div class ="container">
+            <h1 id="detail_title">Detail Flight</h1>
+            <form th:action="@{/admin/addFlight}" th:object="${flight}" method="post">
+                
+                <div id="flight_number" class="form-group row">
+                    <label class="col-md-2 col-form-label"> Flight Number</label>
+                    <input type="text" th:field="*{flightNumber}"class="col-md-3 form-control" th:value = "*{flightNumber}" placeholder="Flight Number"/>
+                     
+                    <input type="text" th:field="*{id}"class="col-md-3 form-control" th:value="*{id}" placeholder="id" hidden="true"/>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">From</label>
+                    <select th:field="*{departAirportId}" th:value="*{departAirportId}" class="col-sm-2 form-control">
+                        <option th:each="airport:${listAirport}" th:text="${airport.airportName}" th:value="${airport.airportId}"></option>
+                        <option selected="true" value="">Choose From...</option>
+                    </select>
+                    <label class="col-sm-2 col-form-label">To</label>
+                    <select th:field="*{arrivAirportId}" th:value="*{arrivAirportId}" class="col-sm-2 form-control" >
+                        <option th:each="airport:${listAirport}" th:text="${airport.airportName}" th:value="${airport.airportId}"></option>
+                        <option selected="true" value="">Choose To...</option>
+                    </select>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Departure Date</label>
+                    <div class='col-sm-3 input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" th:field="*{departDate}" th:value="*{departDate}">
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+
+                    <label class="col-sm-2 col-form-label">Departure Date</label>
+                    <div class='col-sm-3 input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" th:field="*{arrivDate}" th:value="*{arrivDate}"/>
+                        <span class="input-group-addon">
+                            <span class="fa fa-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label" >Price From</label>
+                    <input type="number" th:field="*{price}" class="col-sm-2 form-control" th:value="*{arrivDate}"/>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-sm-1">
+                        <button type="submit" id="btnSearch" class="btn btn-primary">Submit</button>
+                    </div>
+                    <div class="col-sm-1">
+                        <a th:href="@{/admin/listflight}" class="btn btn-primary">Back</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <th:block th:replace="web/layout::js_layout"></th:block>
+        <script type="text/javascript">
+            $(function () {
+                $('.date').datetimepicker({
+                    format: 'DD/MM/YYYY HH:ss'
+                });
+            });
+        </script>
+    </body>
+</html>

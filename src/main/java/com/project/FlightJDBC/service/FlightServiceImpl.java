@@ -4,6 +4,7 @@ package com.project.FlightJDBC.service;
 import com.project.FlightJDBC.DTO.FlightDTO;
 import com.project.FlightJDBC.entity.Flight;
 import com.project.FlightJDBC.repository.FlightRepository;
+import com.project.FlightJDBC.repository.OrderFlightRepository;
 import java.util.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -25,6 +26,8 @@ public class FlightServiceImpl implements FlightService {
     @Autowired
     private FlightRepository flightRepo;
 
+    @Autowired 
+    private OrderFlightRepository orderFlightRepo;
 //<editor-fold defaultstate="collapsed" desc="FIND ALL">
     @Override
     public List<Flight> findAll() {
@@ -36,44 +39,45 @@ public class FlightServiceImpl implements FlightService {
     @Override
     public List<Flight> findByParam(FlightDTO flightDTO) {
 
-        Timestamp dateTimestamp = null;
-        try {
-            DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
-            Date date = formatter.parse(flightDTO.getDepartDate());
-            dateTimestamp = new Timestamp(date.getTime());
-
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-        return flightRepo.findByParams(flightDTO.getDepartAirportId(), flightDTO.getArrivAirportId(), flightDTO.getPriceFrom(), flightDTO.getPriceTo(), dateTimestamp);
+        return flightRepo.findByParams( flightDTO.getDepartAirportId(), 
+                                        flightDTO.getArrivAirportId(), 
+                                        flightDTO.getPriceFrom(), 
+                                        flightDTO.getPriceTo(), 
+                                        flightDTO.getDepartDate());
     }
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="SAVE">
     @Override
-    public Flight save(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int save(FlightDTO flight) {
+        return flightRepo.save(flight);
     }
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="UPDATE">
     @Override
-    public Flight update(Flight flight) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int update(FlightDTO flight) {
+        return flightRepo.update(flight);
     }
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="DELETE">
     @Override
-    public void delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(long id) {
+        int orderCounting = orderFlightRepo.countOrderForFlightId(id);
+        if(orderCounting > 0){
+            System.out.println("Not delete flight because order that related with table flight by id, had data");
+        }else{
+            flightRepo.delete(id);
+        }
+        
     }
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
     @Override
-    public Flight findById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Flight findById(long id) {
+        return flightRepo.findById(id);
     }
 //</editor-fold>
 

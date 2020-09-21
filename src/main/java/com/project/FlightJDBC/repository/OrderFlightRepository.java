@@ -12,5 +12,6 @@ public interface OrderFlightRepository {
     Long save(OrderFlight orderFlight);
     void update(OrderFlight orderFlight);
     void delete(Long id);
-    OrderFlight findById(Long id); 
+    OrderFlight findById(Long id);
+    int countOrderForFlightId(Long id); 
 }

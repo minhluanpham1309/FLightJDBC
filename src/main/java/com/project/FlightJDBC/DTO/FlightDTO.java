@@ -1,12 +1,13 @@
 package com.project.FlightJDBC.DTO;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
-public class FlightDTO {
+public class FlightDTO implements Serializable{
     
     private Long id;
     private String flightNumber;
@@ -17,6 +18,11 @@ public class FlightDTO {
     private int priceTo;
     private String departAirportId;
     private String arrivAirportId;
+
+    @Override
+    public String toString() {
+        return "FlightDTO{" + "id=" + id + ", flightNumber=" + flightNumber + ", departDate=" + departDate + ", arrivDate=" + arrivDate + ", price=" + price + ", priceFrom=" + priceFrom + ", priceTo=" + priceTo + ", departAirportId=" + departAirportId + ", arrivAirportId=" + arrivAirportId + ", departAirportName=" + departAirportName + ", arrivAirportName=" + arrivAirportName + '}';
+    }
     private String departAirportName;
     private String arrivAirportName;
 

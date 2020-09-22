@@ -1,10 +1,12 @@
 package com.project.FlightJDBC.entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
-public class Flight {
+public class Flight implements Serializable{
 
     private Long id;
     private String flightNumber;

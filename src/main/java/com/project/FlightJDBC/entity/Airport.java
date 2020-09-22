@@ -1,12 +1,14 @@
 package com.project.FlightJDBC.entity;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
 
 
-public class Airport {
+public class Airport implements Serializable{
     private String airportId;
     private String airportName;
 

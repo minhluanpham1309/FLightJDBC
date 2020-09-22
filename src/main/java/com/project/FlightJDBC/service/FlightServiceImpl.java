@@ -5,13 +5,12 @@ import com.project.FlightJDBC.DTO.FlightDTO;
 import com.project.FlightJDBC.entity.Flight;
 import com.project.FlightJDBC.repository.FlightRepository;
 import com.project.FlightJDBC.repository.OrderFlightRepository;
-import java.util.Date;
-import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 //</editor-fold>
 
@@ -22,47 +21,60 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FlightServiceImpl implements FlightService {
-
+    
+    private static final Logger logger = LogManager.getLogger(FlightServiceImpl.class);
+    
     @Autowired
     private FlightRepository flightRepo;
 
     @Autowired 
     private OrderFlightRepository orderFlightRepo;
-//<editor-fold defaultstate="collapsed" desc="FIND ALL">
+    
+    
+    //<editor-fold defaultstate="collapsed" desc="FIND ALL">
+    
     @Override
+    @Cacheable(value = "flights")
     public List<Flight> findAll() {
-        return flightRepo.findAll();
+        List<Flight> flights = flightRepo.findAll();
+        logger.info(flights);
+        return flights;
     }
 //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
+    //<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
     @Override
+    @Cacheable(value = "flights", key = "{#flightDTO.departAirportId, #flightDTO.arrivAirportId}", unless = "#result!=null")
     public List<Flight> findByParam(FlightDTO flightDTO) {
-
-        return flightRepo.findByParams( flightDTO.getDepartAirportId(), 
+        List<Flight> flights = flightRepo.findByParams( flightDTO.getDepartAirportId(), 
                                         flightDTO.getArrivAirportId(), 
                                         flightDTO.getPriceFrom(), 
                                         flightDTO.getPriceTo(), 
                                         flightDTO.getDepartDate());
+        logger.info(flights);
+        return flights;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="SAVE">
+    //<editor-fold defaultstate="collapsed" desc="SAVE">
     @Override
+    @CacheEvict(value = "flights", allEntries = true )
     public int save(FlightDTO flight) {
         return flightRepo.save(flight);
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="UPDATE">
+    //<editor-fold defaultstate="collapsed" desc="UPDATE">
     @Override
+    @CacheEvict(value = "flights", allEntries = true)
     public int update(FlightDTO flight) {
         return flightRepo.update(flight);
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="DELETE">
+    //<editor-fold defaultstate="collapsed" desc="DELETE">
     @Override
+    @CacheEvict(value = "flights", allEntries = true)
     public void delete(long id) {
         int orderCounting = orderFlightRepo.countOrderForFlightId(id);
         if(orderCounting > 0){
@@ -70,15 +82,16 @@ public class FlightServiceImpl implements FlightService {
         }else{
             flightRepo.delete(id);
         }
-        
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="FIND BY ID">
+    //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
+    
     @Override
+    @Cacheable("flight")
     public Flight findById(long id) {
         return flightRepo.findById(id);
     }
-//</editor-fold>
+    //</editor-fold>
 
 }

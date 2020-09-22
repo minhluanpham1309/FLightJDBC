@@ -1,6 +1,7 @@
 package com.project.FlightJDBC.entity;
 
 //<editor-fold defaultstate="collapsed" desc="comment">
+import java.io.Serializable;
 import java.sql.Timestamp;
 //</editor-fold>
 
@@ -8,7 +9,7 @@ import java.sql.Timestamp;
  *
  * @author Pham Minh Luan <phamminhluan@fabercompany.co.jp>
  */
-public class OrderFlight {
+public class OrderFlight implements Serializable{
 
     private Long id;
     private Timestamp timeOrder;

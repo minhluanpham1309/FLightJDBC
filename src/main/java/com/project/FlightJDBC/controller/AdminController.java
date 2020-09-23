@@ -32,14 +32,14 @@ public class AdminController {
     @Autowired
     private OrderFlightService orderService;
 
-    //<editor-fold defaultstate="collapsed" desc="WELLCOME">
+//<editor-fold defaultstate="collapsed" desc="WELLCOME">
     @RequestMapping(value = "/admin")
     public String index() {
         return "admin/wellcome";
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="LIST FLIGHT">
+//<editor-fold defaultstate="collapsed" desc="LIST FLIGHT">
     @RequestMapping(value = "/admin/listflight")
     public String listFlight(Model model) {
         model.addAttribute("listFlight", flightserv.findAll());
@@ -47,7 +47,7 @@ public class AdminController {
     }
     //</editor-fold>
 
-    //<editor-fold defaultstate="collapsed" desc="LIST ORDER">
+//<editor-fold defaultstate="collapsed" desc="LIST ORDER">
     @RequestMapping(value = "/admin/listorder")
     public String listOrder(Model model) {
         model.addAttribute("listOrder", orderService.findAll());

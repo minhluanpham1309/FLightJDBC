@@ -22,5 +22,5 @@ public class AirportServiceImpl implements AirportService {
     public List<Airport> findAll() {
         return airportRepo.findAll();
     }
-
+    
 }

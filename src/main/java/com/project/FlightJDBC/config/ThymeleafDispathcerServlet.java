@@ -1,6 +1,6 @@
 package com.project.FlightJDBC.config;
 
-//<editor-fold defaultstate="collapsed" desc="comment">
+//<editor-fold defaultstate="collapsed" desc="IMPORT">
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.exception.ExceptionUtils;

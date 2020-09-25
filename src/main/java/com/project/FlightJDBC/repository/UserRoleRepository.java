@@ -9,7 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -71,9 +74,27 @@ public class UserRoleRepository {
             userRole.setUserPassword(user.getUserPassword());
             userRole.setRoles(findRoleByUserName(userName));
             return userRole;
-        }else{
+        } else {
             System.out.println("User Null");
             return null;
         }
+    }
+
+    public Map<String, Object> checkLogin(String UserName, String password) {
+        UserRole userRole = findUserRoleByUserName(UserName);
+        Map result = new HashMap<>();
+        result.put("status", "failed");
+        result.put("userInfo", null);
+        if (userRole != null) {
+            result.put("userInfo", userRole);
+            if (userRole.getActive() == 0) {
+                result.put("status", "blocked");
+            }
+            if (!BCrypt.checkpw(password, userRole.getUserPassword())) {
+                result.put("status", "wrong_password");
+            }
+            result.put("status", "success");
+        }
+        return result;
     }
 }

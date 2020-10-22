@@ -34,64 +34,62 @@ public class FlightServiceImpl implements FlightService {
     //<editor-fold defaultstate="collapsed" desc="FIND ALL">
     
     @Override
-    @Cacheable(value = "flights")
-    public List<Flight> findAll() {
-        List<Flight> flights = flightRepo.findAll();
-        logger.info(flights);
+    //@Cacheable(value = "flights")
+    public List<FlightDTO> findAll() {
+        List<FlightDTO> flights = flightRepo.findAll();
         return flights;
     }
-//</editor-fold>
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
     @Override
-    @Cacheable(value = "flights", key = "{#flightDTO.departAirportId, #flightDTO.arrivAirportId}", unless = "#result!=null")
-    public List<Flight> findByParam(FlightDTO flightDTO) {
-        List<Flight> flights = flightRepo.findByParams( flightDTO.getDepartAirportId(), 
+    //@Cacheable(value = "flights", key = "{#flightDTO.departAirportId, #flightDTO.arrivAirportId}", unless = "#result!=null")
+    public List<FlightDTO> findByParam(FlightDTO flightDTO) {
+        List<FlightDTO> flights = flightRepo.findByParams( flightDTO.getDepartAirportId(), 
                                         flightDTO.getArrivAirportId(), 
                                         flightDTO.getPriceFrom(), 
                                         flightDTO.getPriceTo(), 
                                         flightDTO.getDepartDate());
-        logger.info(flights);
         return flights;
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="SAVE">
     @Override
-    @CacheEvict(value = "flights", allEntries = true )
-    public int save(FlightDTO flight) {
+    //@CacheEvict(value = "flights", allEntries = true )
+    public int add(FlightDTO flight) {
         return flightRepo.save(flight);
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="UPDATE">
     @Override
-    @CacheEvict(value = "flights", allEntries = true)
-    public int update(FlightDTO flight) {
+    //@CacheEvict(value = "flights", allEntries = true)
+    public boolean update(FlightDTO flight) {
         return flightRepo.update(flight);
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="DELETE">
     @Override
-    @CacheEvict(value = "flights", allEntries = true)
-    public void delete(long id) {
-        int orderCounting = orderFlightRepo.countOrderForFlightId(id);
-        if(orderCounting > 0){
-            System.out.println("Not delete flight because order that related with table flight by id, had data");
+    //@CacheEvict(value = "flights", allEntries = true)
+    public boolean delete(long id) {
+        if(orderFlightRepo.countOrderForFlightId(id)>0){
+            return false;
         }else{
-            flightRepo.delete(id);
+            return flightRepo.delete(id);
         }
     }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
-    
     @Override
-    @Cacheable("flight")
-    public Flight findById(long id) {
+    //@Cacheable("flight")
+    public FlightDTO findById(long id) {
         return flightRepo.findById(id);
     }
     //</editor-fold>
+
+    
 
 }

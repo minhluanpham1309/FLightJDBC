@@ -1,6 +1,7 @@
 package com.project.FlightJDBC.service;
 
 //<editor-fold defaultstate="collapsed" desc="comment">
+import com.project.FlightJDBC.DTO.FlightDTO;
 import com.project.FlightJDBC.entity.Flight;
 import java.util.List;
 //</editor-fold>
@@ -11,15 +12,15 @@ import java.util.List;
  */
 public interface FlightService {
 
-    List<Flight> findAll();
+    List<FlightDTO> findAll();
 
-    List<Flight> findByFromTo(String from, String to);
+    List<FlightDTO> findByParam(FlightDTO flightDTO);
 
-    Flight findById(Long id);
+    FlightDTO findById(long id);
 
-    Flight save(Flight flight);
+    int add(FlightDTO flight);
 
-    Flight update(Flight flight);
+    boolean update(FlightDTO flight);
 
-    void delete(Long id);
+    boolean delete(long id);
 }

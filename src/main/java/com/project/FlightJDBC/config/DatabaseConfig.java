@@ -20,7 +20,7 @@ public class DatabaseConfig {
         System.out.println("----HIKARY DATASOURCE----");
         HikariConfig config = new HikariConfig();
 
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/db_flights?useSSL=false");
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/db_flights?allowPublicKeyRetrieval=true&useSSL=false");
         config.setUsername("root");
         config.setPassword("12345");
         config.addDataSourceProperty("cachePrepStmts", "true");

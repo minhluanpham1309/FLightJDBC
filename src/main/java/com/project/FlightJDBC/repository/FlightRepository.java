@@ -12,16 +12,16 @@ import java.util.List;
  */
 public interface FlightRepository {
 
-    List<Flight> findAll();
+    List<FlightDTO> findAll();
 
-    List<Flight> findByParams(String from, String to, int priceFrom, int priceTo, String date);
+    List<FlightDTO> findByParams(String from, String to, int priceFrom, int priceTo, String date);
 
     int save(FlightDTO flight);
 
-    int update(FlightDTO flight);
+    boolean update(FlightDTO flight);
 
-    void delete(long id);
+    boolean delete(long id);
 
-    Flight findById(long id);
+    FlightDTO findById(long id);
     
 }

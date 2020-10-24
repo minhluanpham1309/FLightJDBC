@@ -32,14 +32,14 @@ public class AdminController {
     @Autowired
     private OrderFlightService orderService;
 
-//<editor-fold defaultstate="collapsed" desc="WELLCOME">
+    //<editor-fold defaultstate="collapsed" desc="WELLCOME">
     @RequestMapping(value = "/admin")
     public String index() {
         return "admin/wellcome";
     }
     //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="LIST FLIGHT">
+    //<editor-fold defaultstate="collapsed" desc="LIST FLIGHT">
     @RequestMapping(value = "/admin/listflight")
     public String listFlight(Model model) {
         model.addAttribute("listFlight", flightserv.findAll());
@@ -47,7 +47,7 @@ public class AdminController {
     }
     //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="LIST ORDER">
+    //<editor-fold defaultstate="collapsed" desc="LIST ORDER">
     @RequestMapping(value = "/admin/listorder")
     public String listOrder(Model model) {
         model.addAttribute("listOrder", orderService.findAll());
@@ -55,20 +55,20 @@ public class AdminController {
     }
     //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="OPEN DETAIL FLIGHT">
+    //<editor-fold defaultstate="collapsed" desc="OPEN DETAIL FLIGHT">
     @RequestMapping(value = "admin/addFlight", method = RequestMethod.GET)
     public String openDetailFlight(Model model) {
         model.addAttribute("listAirport", airportServ.findAll());
         model.addAttribute("flight", new FlightDTO());
         return "admin/detailFlight";
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="ADD FLIGHT">
+    //<editor-fold defaultstate="collapsed" desc="ADD FLIGHT">
     @RequestMapping(value = "admin/addFlight", method = RequestMethod.POST)
     public String addFlight(@ModelAttribute FlightDTO flight, Model model) {
         if (flight.getId() == null) {
-            if (flightserv.save(flight) > 0) {
+            if (flightserv.add(flight) > 0) {
                 System.out.println("---ADD SUCCESS---");
             } else {
                 System.out.println("----ADD NOT SUCCESS----");
@@ -78,23 +78,21 @@ public class AdminController {
         }
         return "redirect:/admin/listflight";
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="UPDATE FLIGHT">
+    //<editor-fold defaultstate="collapsed" desc="UPDATE FLIGHT">
     @RequestMapping(value = "admin/edit/{id}", method = RequestMethod.GET)
     public String updateFlight(@PathVariable("id") Long id, Model model) {
-        Flight flight = flightserv.findById(id);
         model.addAttribute("listAirport", airportServ.findAll());
-        model.addAttribute("flight", flight);
-        return "admin/detailFlight";
+        model.addAttribute("flight", flightserv.findById(id));
+        return "redirect:/admin/detailFlight";
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="DELETE FLIGHT">
+    //<editor-fold defaultstate="collapsed" desc="DELETE FLIGHT">
     @RequestMapping(value = "admin/delete/{id}", method = RequestMethod.POST)
     public String deleteFlight(@PathVariable("id") long id, Model model) {
-
         return "redirect:/admin/listflight";
     }
-//</editor-fold>
+    //</editor-fold>
 }

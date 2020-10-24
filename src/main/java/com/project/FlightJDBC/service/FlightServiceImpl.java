@@ -34,7 +34,7 @@ public class FlightServiceImpl implements FlightService {
     //<editor-fold defaultstate="collapsed" desc="FIND ALL">
     
     @Override
-    //@Cacheable(value = "flights")
+    @Cacheable(value = "flights")
     public List<FlightDTO> findAll() {
         List<FlightDTO> flights = flightRepo.findAll();
         return flights;
@@ -43,7 +43,7 @@ public class FlightServiceImpl implements FlightService {
 
     //<editor-fold defaultstate="collapsed" desc="FIND WITH PARAM">
     @Override
-    //@Cacheable(value = "flights", key = "{#flightDTO.departAirportId, #flightDTO.arrivAirportId}", unless = "#result!=null")
+    @Cacheable(value = "flights", key = "{#flightDTO.departAirportId, #flightDTO.arrivAirportId}", unless = "#result!=null")
     public List<FlightDTO> findByParam(FlightDTO flightDTO) {
         List<FlightDTO> flights = flightRepo.findByParams( flightDTO.getDepartAirportId(), 
                                         flightDTO.getArrivAirportId(), 
@@ -84,7 +84,7 @@ public class FlightServiceImpl implements FlightService {
 
     //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
     @Override
-    //@Cacheable("flight")
+    @Cacheable(value = "flight")
     public FlightDTO findById(long id) {
         return flightRepo.findById(id);
     }

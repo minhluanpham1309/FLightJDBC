@@ -24,7 +24,7 @@ public class UserRepository {
         String sql = "select user_id,\n"
                 + "user_account,\n"
                 + "user_password,\n"
-                + "active\n"
+                + "user_active\n"
                 + "from tbl_user\n"
                 + "where user_account = ?";
         User user = null;
@@ -39,7 +39,7 @@ public class UserRepository {
                     user.setUserId(rs.getLong("user_id"));
                     user.setUserAccount(rs.getString("user_account"));
                     user.setUserPassword(rs.getString("user_password"));
-                    user.setActive(rs.getInt("active"));
+                    user.setActive(rs.getInt("user_active"));
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();

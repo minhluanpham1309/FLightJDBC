@@ -27,9 +27,9 @@ public class FlightRepositoryImpl implements FlightRepository {
     @Autowired
     private HikariDataSource datasource;
 
-//<editor-fold defaultstate="collapsed" desc="FINDALL">
+    //<editor-fold defaultstate="collapsed" desc="FINDALL">
     @Override
-    public List<Flight> findAll() {
+    public List<FlightDTO> findAll() {
         String sql = "select flight_id, flight_number,\n"
                 + "depart_airport_id,\n"
                 + "a.airport_name as depart_airport_name,\n"
@@ -40,7 +40,7 @@ public class FlightRepositoryImpl implements FlightRepository {
                 + "price\n"
                 + "from tbl_flight join tbl_airport a on tbl_flight.depart_airport_id = a.airport_id \n"
                 + "join tbl_airport b on tbl_flight.arriv_airport_id = b.airport_id \n";
-        List<Flight> flights = new ArrayList<>();
+        List<FlightDTO> flights = new ArrayList<>();
 
         try (Connection conn = datasource.getConnection();
                 PreparedStatement statement = conn.prepareStatement(sql);
@@ -48,8 +48,7 @@ public class FlightRepositoryImpl implements FlightRepository {
             System.out.println("---SQL FIND ALL---");
             System.out.println(statement.toString());
             while (rs.next()) {
-                Flight flight = new Flight();
-
+                FlightDTO flight = new FlightDTO();
                 flight.setId(rs.getLong("flight_id"));
                 flight.setFlightNumber(rs.getString("flight_number"));
                 flight.setDepartAirportId(rs.getString("depart_airport_id"));
@@ -59,7 +58,6 @@ public class FlightRepositoryImpl implements FlightRepository {
                 flight.setPrice(rs.getInt("price"));
                 flight.setDepartAirportName(rs.getString("depart_airport_name"));
                 flight.setArrivAirportName(rs.getString("arriv_airport_name"));
-
                 flights.add(flight);
             }
         } catch (SQLException e) {
@@ -67,38 +65,13 @@ public class FlightRepositoryImpl implements FlightRepository {
         }
         return flights;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="SET PARAM FOR STATEMENT">
-    private void setParameters(PreparedStatement statement, Object... params) {
-        try {
-            for (int i = 0; i < params.length; i++) {
-                Object parm = params[i];
-                int index = i + 1;
-
-                if (parm instanceof Long) {
-                    statement.setLong(index, (Long) parm);
-                } else if (parm instanceof String) {
-                    statement.setString(index, (String) parm);
-                } else if (parm instanceof Integer) {
-                    statement.setInt(index, (int) parm);
-                } else if (parm instanceof Timestamp) {
-                    statement.setTimestamp(index, (Timestamp) parm);
-                } else if (parm == null) {
-                    statement.setNull(index, Types.NULL);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-//</editor-fold>
-
-//<editor-fold defaultstate="collapsed" desc="FIND FLIGHT WITH PARAMETER">
+    //<editor-fold defaultstate="collapsed" desc="FIND FLIGHT WITH PARAMETER">
     @Override
-    public List<Flight> findByParams(String from, String to, int priceFrom, int priceTo, String date) {
+    public List<FlightDTO> findByParams(String from, String to, int priceFrom, int priceTo, String date) {
 
-        List<Flight> flights = new ArrayList<>();
+        List<FlightDTO> flights = new ArrayList<>();
         String sql = "select flight_id, flight_number,\n"
                 + "depart_airport_id,\n"
                 + "a.airport_name as depart_airport_name,\n"
@@ -124,7 +97,7 @@ public class FlightRepositoryImpl implements FlightRepository {
             System.out.println(statement.toString());
             try (ResultSet rs = statement.executeQuery();) {
                 while (rs.next()) {
-                    Flight flight = new Flight();
+                    FlightDTO flight = new FlightDTO();
 
                     flight.setId(rs.getLong("flight_id"));
                     flight.setFlightNumber(rs.getString("flight_number"));
@@ -145,9 +118,9 @@ public class FlightRepositoryImpl implements FlightRepository {
         }
         return flights;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="SAVE">
+    //<editor-fold defaultstate="collapsed" desc="SAVE">
     @Override
     public int save(FlightDTO flight) {
         String sql = "insert into tbl_flight\n"
@@ -177,11 +150,11 @@ public class FlightRepositoryImpl implements FlightRepository {
         }
         return 0;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="UPDATE">
+    //<editor-fold defaultstate="collapsed" desc="UPDATE">
     @Override
-    public int update(FlightDTO flight) {
+    public boolean update(FlightDTO flight) {
         String sql = "update tbl_flight set\n"
                 + "flight_number = ?,\n"
                 + "depart_airport_id = ?,\n"
@@ -190,9 +163,9 @@ public class FlightRepositoryImpl implements FlightRepository {
                 + "arriv_date = STR_TO_DATE(?,\"%d/%m/%Y %H:%S\"),\n"
                 + "price = ?\n"
                 + "where flight_id = ?";
-        int flightId = -1;
         try (Connection conn = datasource.getConnection();
                 PreparedStatement statement = conn.prepareStatement(sql);) {
+            System.out.println("---SQL ADD FLIGHT---");
             statement.setString(1, flight.getFlightNumber());
             statement.setString(2, flight.getDepartAirportId());
             statement.setString(3, flight.getArrivAirportId());
@@ -200,19 +173,18 @@ public class FlightRepositoryImpl implements FlightRepository {
             statement.setString(5, flight.getArrivDate());
             statement.setInt(6, flight.getPrice());
             statement.setLong(7, flight.getId());
-            System.out.println("---SQL ADD FLIGHT---");
             System.out.println(statement.toString());
-            flightId = statement.executeUpdate();
+            return statement.executeUpdate() == 1;
         } catch (Exception e) {
             e.getStackTrace();
         }
-        return flightId;
+        return false;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="DELETE">
+    //<editor-fold defaultstate="collapsed" desc="DELETE">
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
         String sql = "delete from tbl_flight "
                 + "where flight_id = ?";
         int flightId = -1;
@@ -221,16 +193,17 @@ public class FlightRepositoryImpl implements FlightRepository {
             statement.setLong(1, id);
             System.out.println("---SQL ADD FLIGHT---");
             System.out.println(statement.toString());
-            flightId = statement.executeUpdate();
+            return statement.executeUpdate() == 1;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return false;
     }
-//</editor-fold>
+    //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="FIND BY ID">
+    //<editor-fold defaultstate="collapsed" desc="FIND BY ID">
     @Override
-    public Flight findById(long id) {
+    public FlightDTO findById(long id) {
         String sql = "select flight_id, flight_number,\n"
                 + "depart_airport_id,\n"
                 + "a.airport_name as depart_airport_name,\n"
@@ -243,7 +216,7 @@ public class FlightRepositoryImpl implements FlightRepository {
                 + "join tbl_airport b on tbl_flight.arriv_airport_id = b.airport_id \n"
                 + "where 1=1\n";
         sql = sql.concat("and flight_id = ?");
-        Flight flight = new Flight();
+        FlightDTO flight = new FlightDTO();
         try (Connection conn = datasource.getConnection();
                 PreparedStatement statement = conn.prepareStatement(sql);) {
             statement.setLong(1, id);
@@ -262,12 +235,11 @@ public class FlightRepositoryImpl implements FlightRepository {
                     flight.setArrivAirportName(rs.getString("arriv_airport_name"));
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return flight;
     }
-//</editor-fold>
+    //</editor-fold>
 
 }

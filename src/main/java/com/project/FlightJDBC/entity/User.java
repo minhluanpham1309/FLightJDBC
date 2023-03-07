@@ -1,7 +1,6 @@
 package com.project.FlightJDBC.entity;
 
 /**
- *
  * @author Pham Minh Luan
  * @email phamminhluan@fabercompany.co.jp
  */
@@ -9,7 +8,7 @@ public class User {
     private long userId;
     private String userAccount;
     private String userPassword;
-    private long active;
+    private int active;
 
     public long getUserId() {
         return userId;
@@ -35,11 +34,11 @@ public class User {
         this.userPassword = userPassword;
     }
 
-    public long getActive() {
+    public int getActive() {
         return active;
     }
 
-    public void setActive(long active) {
+    public void setActive(int active) {
         this.active = active;
     }
 }
